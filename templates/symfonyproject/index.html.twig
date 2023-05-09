@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+  
+{% block title %}Bienvenue{% endblock %}
+  
+{% block body %}
+    <div class="container">
+        <h2 class="text-center mt-5 mb-3">E-bibliothèque</h2>
+        <div class="card">
+            <div class="card-header">
+                <a class="btn btn-outline-primary" href="{{ path('app_symfonyproject_new') }}"> 
+                    Nouveau livre 
+                </a>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Titre</th>
+                        <th>Description</th>
+                        <th>Date de création</th>
+                        <th>Date de modification</th>
+                        <th width="240px">Action</th>
+                    </tr>
+                    {% for symfonyproject in symfonyprojects %}
+                    <tr>
+                        <td>{{ symfonyproject.titre }}</td>
+                        <td>{{ symfonyproject.description }}</td>
+                        <td>{{ symfonyproject.createdAt ? symfonyproject.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                        <td>{{ symfonyproject.updatedAt ? symfonyproject.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                        <td>
+                            <form method="post" action="{{ path('app_symfonyproject_delete', {'id': symfonyproject.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer ce livre ?');">
+                                <a
+                                    class="btn btn-outline-info"
+                                    href="{{ path('app_symfonyproject_show', {'id': symfonyproject.id}) }}">
+                                    Voir
+                                </a>
+                                <a
+                                    class="btn btn-outline-success"
+                                    href="{{ path('app_symfonyproject_edit', {'id': symfonyproject.id}) }}">
+                                    MAJ
+                                </a>
+  
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ symfonyproject.id) }}">
+                                <button class="btn btn-outline-danger">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+  
+{% endblock %}
